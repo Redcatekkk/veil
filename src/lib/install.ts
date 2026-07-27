@@ -1,0 +1,42 @@
+import { invoke } from "@tauri-apps/api/core";
+
+export interface InstallEntry {
+  name: string;
+  kind: string;
+  app_id: number | null;
+  status: string;
+}
+
+export interface InstallReport {
+  entries: InstallEntry[];
+  lua_count: number;
+  manifest_count: number;
+  skipped: number;
+  app_ids: number[];
+}
+
+export function installManifestPaths(
+  steamPath: string,
+  paths: string[]
+): Promise<InstallReport> {
+  return invoke("install_manifest_paths", { steamPath, paths });
+}
+
+export function installManifestBlob(
+  steamPath: string,
+  name: string,
+  data: Uint8Array
+): Promise<InstallReport> {
+  return invoke("install_manifest_blob", { steamPath, name, data });
+}
+
+export function installManifestUrl(
+  steamPath: string,
+  url: string
+): Promise<InstallReport> {
+  return invoke("install_manifest_url", { steamPath, url });
+}
+
+export function deleteImportFiles(paths: string[]): Promise<void> {
+  return invoke("delete_import_files", { paths });
+}
